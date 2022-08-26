@@ -8,6 +8,7 @@ namespace Menu
         public bool onfile { get; set; }
         public bool selected { get; set; }
         public string toOpen { get; set; }
+        public string root { get; } = "./test";
 
         public MenuManager()
         {
@@ -18,7 +19,8 @@ namespace Menu
         public void getDirectoryContent()
         {
             pointer = 0;
-            menuView = new MenuView(Directory.EnumerateFileSystemEntries("./test").ToArray());
+            menuView = new MenuView(Directory.EnumerateFileSystemEntries(root).ToArray());
+            toOpen = root;
             menuView.showMenu(pointer);
         }
 
@@ -72,9 +74,21 @@ namespace Menu
                     }
                     break;
                 case ConsoleKey.Escape:
-                    if(onfile) {
+                    if (onfile)
+                    {
                         onfile = false;
                     }
+                    break;
+                case ConsoleKey.LeftArrow:
+                    if (onfile)
+                    {
+                        break;
+                    }
+                    if (toOpen == root)
+                    {
+                        break;
+                    }
+                    previousDir();
                     break;
             }
         }
@@ -103,9 +117,21 @@ namespace Menu
                     KeyPress(Console.ReadKey(true).Key);
                 }
 
-                getDirectoryContent();
-                startMenu();
+                
+                previousDir();
+
             }
+        }
+
+        public void previousDir()
+        {
+            string[] dirs = toOpen.Split(@"\");
+            toOpen = root;
+            for (int i = 1; i < dirs.Length - 1; i++)
+            {
+                toOpen += $"/{dirs[i]}";
+            }
+            enter();
         }
     }
 
