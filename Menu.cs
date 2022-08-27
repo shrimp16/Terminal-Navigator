@@ -44,26 +44,10 @@ namespace Menu
             switch (key)
             {
                 case ConsoleKey.UpArrow:
-                    if (pointer == 0)
-                    {
-                        break;
-                    }
-                    pointer--;
-                    if (!onfile)
-                    {
-                        menuView.showMenu(pointer);
-                    }
+                    DecrementPointer();
                     break;
                 case ConsoleKey.DownArrow:
-                    if (pointer == menuView.lines.Length - 1)
-                    {
-                        break;
-                    }
-                    pointer++;
-                    if (!onfile)
-                    {
-                        menuView.showMenu(pointer);
-                    }
+                    IncrementPointer();
                     break;
                 case ConsoleKey.Enter:
                     if (!onfile)
@@ -74,22 +58,39 @@ namespace Menu
                     }
                     break;
                 case ConsoleKey.Escape:
-                    if (onfile)
-                    {
-                        onfile = false;
-                    }
+                    if (onfile) onfile = false;
                     break;
                 case ConsoleKey.LeftArrow:
-                    if (onfile)
-                    {
-                        break;
-                    }
-                    if (toOpen == root)
-                    {
-                        break;
-                    }
+                    if (onfile) break;
+                    if (toOpen == root) break;
                     previousDir();
                     break;
+            }
+        }
+
+        public void DecrementPointer()
+        {
+            if (pointer == 0)
+            {
+                return;
+            }
+            pointer--;
+            if (!onfile)
+            {
+                menuView.showMenu(pointer);
+            }
+        }
+
+        public void IncrementPointer()
+        {
+            if (pointer == menuView.lines.Length - 1)
+            {
+                return;
+            }
+            pointer++;
+            if (!onfile)
+            {
+                menuView.showMenu(pointer);
             }
         }
 
@@ -117,7 +118,7 @@ namespace Menu
                     KeyPress(Console.ReadKey(true).Key);
                 }
 
-                
+
                 previousDir();
 
             }
