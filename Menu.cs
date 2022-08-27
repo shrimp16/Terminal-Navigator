@@ -98,30 +98,33 @@ namespace Menu
         {
             pointer = 0;
             selected = false;
+
             if (Directory.Exists(toOpen))
             {
                 menuView = new MenuView(Directory.EnumerateFileSystemEntries(toOpen).ToArray());
                 menuView.showMenu(pointer);
+                return;
             }
-            else
+            
+            ReadAndShowFile();
+        }
+
+        public void ReadAndShowFile()
+        {
+            Console.Clear();
+            onfile = true;
+
+            foreach (string line in File.ReadAllLines(toOpen))
             {
-                Console.Clear();
-                onfile = true;
-
-                foreach (string str in File.ReadAllLines(toOpen))
-                {
-                    Console.WriteLine(str);
-                }
-
-                while (onfile)
-                {
-                    KeyPress(Console.ReadKey(true).Key);
-                }
-
-
-                previousDir();
-
+                Console.WriteLine(line);
             }
+
+            while (onfile)
+            {
+                KeyPress(Console.ReadKey(true).Key);
+            }
+
+            previousDir();
         }
 
         public void previousDir()
